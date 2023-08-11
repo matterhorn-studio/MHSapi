@@ -1,6 +1,8 @@
 from aiopenapi3 import OpenAPI
+from aiopenapi3.errors import HTTPStatusError
 import pandas as pd
-TOKEN = "67031c6300625373a5a3a0f4576c64592adf1da577a74bf10c8c4ff1315c91e9"
+import webbrowser
+
 class MHSapiClient:
 
     def __init__(self, token, dev=False):
@@ -11,11 +13,31 @@ class MHSapiClient:
 
 
         self.api = OpenAPI.load_sync(self.base_url + "api/schema/")
-        self.api.authenticate(Authorization=f"Token {TOKEN}")
+        self.api.authenticate(Authorization=f"Token {self.token}")
 
         if dev:
             operationIds = list(self.api._.Iter(self.api, False))
             print(operationIds)
+
+    def experiments_create(self,data,open_browser=True):
+        req = self.api.createRequest("api_experiments_create")
+        try:
+            headers, data, response = req.request(parameters={}, data=data)
+        except HTTPStatusError as e:
+            print(f"Error:{e.response.content}")
+        experiment = data
+        if open_browser:
+            self.open_experiment(experiment)
+        return experiment
+
+    def parameters_create(self,data):
+        req = self.api.createRequest("api_parameters_create")
+        try:
+            headers, data, response = req.request(parameters={}, data=data)
+        except HTTPStatusError as e:
+            print(f"Error:{e.response.content}")
+        parameter = data
+        return parameter
 
     def experiments_list(self):
         # List all experiments
@@ -33,7 +55,7 @@ class MHSapiClient:
 
         # Filter for parameters of one experiment
         parameters = data
-        parameters = [p for p in parameters if p.experiment_id == experiment.id]
+        parameters = [p for p in parameters if p.experiment == experiment.id]
         return parameters
 
     def experiment_data(self, experiment):
@@ -46,6 +68,9 @@ class MHSapiClient:
         except:
             print("Failed to read data JSON")
             return -1
+
+    def open_experiment(self, experiment):
+        webbrowser.open(experiment.url, new=0, autoraise=True)
 
     def experiment_update_data(self, experiment, new_measurements):
         # Post data
