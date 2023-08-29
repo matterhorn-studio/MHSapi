@@ -1,5 +1,5 @@
 from aiopenapi3 import OpenAPI
-from aiopenapi3.errors import HTTPStatusError
+from aiopenapi3.errors import HTTPStatusError, ResponseSchemaError
 import pandas as pd
 import webbrowser
 
@@ -61,13 +61,17 @@ class MHSapiClient:
     def experiment_data(self, experiment):
         # Get data
         req = self.api.createRequest("api_experiments_data_retrieve")
-        headers, experiment, response = req.request(parameters={'id': experiment.id}, data=None)
         try:
+            headers, experiment, response = req.request(parameters={'id': experiment.id}, data=None)
+        except ResponseSchemaError:
+            pass
+        try:
+            print(experiment.data_table_json)
             df = pd.read_json(experiment.data_table_json)
             return df
         except:
             print("Failed to read data JSON")
-            return -1
+            return -99
 
     def open_experiment(self, experiment):
         webbrowser.open(experiment.url, new=0, autoraise=True)
