@@ -5,9 +5,9 @@ import webbrowser
 
 class MHSapiClient:
 
-    def __init__(self, token, dev=False):
+    def __init__(self, token, dev=False, base_url='https://matterhorn.studio'):
         self.token = token
-        self.base_url = 'https://matterhorn.studio'
+        self.base_url = 'https://matterhorn.studio/'
         if dev:
             self.base_url = 'http://localhost:8000/'
 
