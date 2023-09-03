@@ -19,6 +19,9 @@ class MHSapiClient:
             operationIds = list(self.api._.Iter(self.api, False))
             print(operationIds)
 
+    def get_base_url(self):
+        return self.base_url
+
     def experiments_create(self,data,open_browser=True):
         req = self.api.createRequest("api_experiments_create")
         try:
