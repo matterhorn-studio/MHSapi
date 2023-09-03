@@ -2,6 +2,7 @@ from aiopenapi3 import OpenAPI
 from aiopenapi3.errors import HTTPStatusError, ResponseSchemaError
 import pandas as pd
 import webbrowser
+import httpx
 
 class MHSapiClient:
 
@@ -11,8 +12,9 @@ class MHSapiClient:
         if dev and base_url == 'https://matterhorn.studio/':
             self.base_url = 'http://localhost:8000/'
 
-
-        self.api = OpenAPI.load_sync(self.base_url + "api/schema/")
+        headers = {'ngrok-skip-browser-warning': 'ngrok-skip-browser-warning'}
+        httpx_client = httpx.Client(headers=headers)
+        self.api = OpenAPI.load_sync(url=self.base_url + "api/schema/", session_factory=httpx_client)
         self.api.authenticate(Authorization=f"Token {self.token}")
 
         if dev:
