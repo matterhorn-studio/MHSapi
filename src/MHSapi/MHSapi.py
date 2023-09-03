@@ -6,15 +6,20 @@ import httpx
 
 class MHSapiClient:
 
+    def get_httpx_client(self):
+        return self.httpx_client
+
     def __init__(self, token, dev=False, base_url='https://matterhorn.studio'):
+        headers = {'ngrok-skip-browser-warning': 'ngrok-skip-browser-warning'}
+        self.httpx_client = httpx.Client(headers=headers)
+
         self.token = token
         self.base_url = base_url
         if dev and base_url == 'https://matterhorn.studio/':
             self.base_url = 'http://localhost:8000/'
 
-        headers = {'ngrok-skip-browser-warning': 'ngrok-skip-browser-warning'}
-        httpx_client = httpx.Client(headers=headers)
-        self.api = OpenAPI.load_sync(url=self.base_url + "api/schema/", session_factory=httpx_client)
+
+        self.api = OpenAPI.load_sync(url=self.base_url + "api/schema/", session_factory=self.get_httpx_client)
         self.api.authenticate(Authorization=f"Token {self.token}")
 
         if dev:
