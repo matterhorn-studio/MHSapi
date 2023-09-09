@@ -15,6 +15,8 @@ class MHSapiClient:
         if dev and base_url == 'https://matterhorn.studio/':
             self.base_url = 'http://localhost:8000/'
 
+        print(f"BASE URL: {self.base_url}")
+
 
         self.api = OpenAPI.load_sync(url=self.base_url + "api/schema/")
         self.api.authenticate(Authorization=f"Token {self.token}")
