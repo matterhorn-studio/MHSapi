@@ -14,6 +14,7 @@ class MHSapiClient:
         self.base_url = base_url
         if dev and base_url == 'https://matterhorn.studio/':
             self.base_url = 'http://localhost:8000/'
+            self.base_url = 'http://localhost:8001/'
 
         print(f"BASE URL: {self.base_url}")
 
