@@ -86,7 +86,8 @@ class MHSapiClient:
             pass
         try:
             print(experiment.data_table_json)
-            df = pd.read_json(experiment.data_table_json)
+            from io import StringIO
+            df = pd.read_json(StringIO(experiment.data_table_json))
             return df
         except:
             print("Failed to read data JSON")
