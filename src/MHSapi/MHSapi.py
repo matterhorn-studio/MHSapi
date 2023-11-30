@@ -69,7 +69,7 @@ class MHSapiClient:
 
     def opt_run_list(self, experiment):
         # List all parameters
-        req = self.api.createRequest("api_optimisation_run_list")
+        req = self.api.createRequest("api_optimisation_runs_list")
         headers, data, response = req.request(parameters={}, data=None)
 
         # Filter for parameters of one experiment
