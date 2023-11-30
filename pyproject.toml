@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "MHSapi"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Jakob Zeitler", email="jakob@matterhorn.studio" },
 ]

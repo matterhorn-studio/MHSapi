@@ -8,7 +8,6 @@ class MHSapiClient:
 
     def __init__(self, token, dev=False, base_url='https://matterhorn.studio'):
         headers = {'ngrok-skip-browser-warning': 'ngrok-skip-browser-warning'}
-        self.httpx_client = httpx.Client(headers=headers)
 
         self.token = token
         self.base_url = base_url
@@ -67,6 +66,16 @@ class MHSapiClient:
         parameters = data
         parameters = [p for p in parameters if p.experiment == experiment.id]
         return parameters
+
+    def opt_run_list(self, experiment):
+        # List all parameters
+        req = self.api.createRequest("api_optimisation_run_list")
+        headers, data, response = req.request(parameters={}, data=None)
+
+        # Filter for parameters of one experiment
+        opt_runs = data
+        opt_runs = [p for p in opt_runs if p.experiment == experiment.id]
+        return opt_runs
 
     def experiment_data(self, experiment):
         # Get data
