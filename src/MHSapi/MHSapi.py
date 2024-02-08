@@ -52,8 +52,8 @@ class MHSapiClient:
         # List all experiments
         req = self.api.createRequest("api_experiments_list")
         headers, data, response = req.request(parameters={}, data=None)
-        print(headers)
-        print(data)
+        #print(headers)
+        #print(data)
         experiments = data
         return experiments
 
@@ -85,7 +85,7 @@ class MHSapiClient:
         except ResponseSchemaError:
             pass
         try:
-            print(experiment.data_table_json)
+            #print(experiment.data_table_json)
             from io import StringIO
             df = pd.read_json(StringIO(experiment.data_table_json))
             return df
